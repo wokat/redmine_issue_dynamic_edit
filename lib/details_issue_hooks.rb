@@ -20,7 +20,29 @@ class DetailsIssueHooks < Redmine::Hook::ViewListener
     return unless current_is_detail_page(context)
 
     if User.current.allowed_to?(:edit_issues, context[:project])
-      javascript_include_tag('issue_dynamic_edit_configuration_file.js', 'issue_dynamic_edit.js', :plugin => :redmine_issue_dynamic_edit)
+      # Inject plugin settings as safe window._CONF_* variables so client-side
+      # scripts can read configured values without redeclaration issues.
+      settings = Setting.plugin_redmine_issue_dynamic_edit || {}
+      force_https = settings['force_https'].to_s == '1' || settings['force_https'].to_s == 'true'
+      display = settings['display_edit_icon'] || 'single'
+      l_type_value = settings['listener_type_value'] || 'click'
+      l_type_icon = settings['listener_type_icon'] || 'click'
+      l_target = settings['listener_target'] || 'value'
+      excluded_raw = settings['excluded_field_id'].to_s
+      excluded_array = excluded_raw.split(',').map(&:strip).reject(&:empty?)
+      check_conflict = settings['check_issue_update_conflict'].to_s == '1' || settings['check_issue_update_conflict'].to_s == 'true'
+
+      script = "<script>\n"
+      script << "window._CONF_FORCE_HTTPS = #{force_https ? 'true' : 'false'};\n"
+      script << "window._CONF_DISPLAY_EDIT_ICON = #{display.inspect};\n"
+      script << "window._CONF_LISTENER_TYPE_VALUE = #{l_type_value.inspect};\n"
+      script << "window._CONF_LISTENER_TYPE_ICON = #{l_type_icon.inspect};\n"
+      script << "window._CONF_LISTENER_TARGET = #{l_target.inspect};\n"
+      script << "window._CONF_EXCLUDED_FIELD_ID = [#{excluded_array.map(&:inspect).join(', ')}];\n"
+      script << "window._CONF_CHECK_ISSUE_UPDATE_CONFLICT = #{check_conflict ? 'true' : 'false'};\n"
+      script << "</script>\n"
+
+      (script + javascript_include_tag('issue_dynamic_edit.js', :plugin => :redmine_issue_dynamic_edit)).html_safe
     end
   end
 

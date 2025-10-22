@@ -1,15 +1,15 @@
 /*
  * OPTIONS DEFINED FROM CONFIGURATION FILE
  */
-var _CONF_FORCE_HTTPS = _CONF_FORCE_HTTPS || false;
-var _CONF_DISPLAY_EDIT_ICON = _CONF_DISPLAY_EDIT_ICON || "single";
-var _CONF_LISTENER_TYPE_VALUE = _CONF_LISTENER_TYPE_VALUE || "click";
-var _CONF_LISTENER_TYPE_ICON = _CONF_LISTENER_TYPE_ICON || "none";
-var _CONF_LISTENER_TARGET = _CONF_LISTENER_TARGET || "value";
-var _CONF_EXCLUDED_FIELD_ID = _CONF_EXCLUDED_FIELD_ID || [];
-var _CONF_CHECK_ISSUE_UPDATE_CONFLICT = _CONF_CHECK_ISSUE_UPDATE_CONFLICT || false;
+if (typeof window._CONF_FORCE_HTTPS === 'undefined') var _CONF_FORCE_HTTPS = false;
+if (typeof window._CONF_DISPLAY_EDIT_ICON === 'undefined') var _CONF_DISPLAY_EDIT_ICON = "single";
+if (typeof window._CONF_LISTENER_TYPE_VALUE === 'undefined') var _CONF_LISTENER_TYPE_VALUE = "click";
+if (typeof window._CONF_LISTENER_TYPE_ICON === 'undefined') var _CONF_LISTENER_TYPE_ICON = "none";
+if (typeof window._CONF_LISTENER_TARGET === 'undefined') var _CONF_LISTENER_TARGET = "value";
+if (typeof window._CONF_EXCLUDED_FIELD_ID === 'undefined') var _CONF_EXCLUDED_FIELD_ID = [];
+if (typeof window._CONF_CHECK_ISSUE_UPDATE_CONFLICT === 'undefined') var _CONF_CHECK_ISSUE_UPDATE_CONFLICT = false;
 
-_CONF_LISTENER_TARGET = _CONF_LISTENER_TARGET === "all" ? "*" : _CONF_LISTENER_TARGET;
+_CONF_LISTENER_TARGET = _CONF_LISTENER_TARGET === "all" ? "" : " ." + _CONF_LISTENER_TARGET;
 
 /*
  *	SVG ICONS
@@ -78,7 +78,6 @@ const getEditFormHTML = function(attribute){
 			formElement = document.querySelector('#issue_custom_field_values_' + CF_ID + '_blank');
 			if(formElement){
 				formElement = formElement.closest('p');
-				formElement.removeChild(formElement.querySelector('label'));
 				is_file = CF_ID;
 			} else {
 				/* Is it a checkbox/radio group ? */
@@ -90,6 +89,9 @@ const getEditFormHTML = function(attribute){
 
 	if(formElement){
 		const clone = formElement.cloneNode(true);
+		if(is_file) {
+			clone.removeChild(clone.querySelector('label'));
+		}
 		if(clone.matches('select') && !clone.hasAttribute('multiple')) {
 			clone.addEventListener('change', function(e){
 				sendData([{"name" : clone.getAttribute('name'), "value" : clone.value}]);
@@ -197,24 +199,22 @@ const cloneEditForm = function(){
 /* Perform action on .value (display edit form) */
 document.querySelector('body').addEventListener(_CONF_LISTENER_TYPE_VALUE,
  	function(e){
-		let is_attribute = e.target.matches('div.issue.details .attributes .attribute .' + _CONF_LISTENER_TARGET) || e.target.closest('div.issue.details .attributes .attribute .' + _CONF_LISTENER_TARGET);
-		let is_description = e.target.matches('div.issue.details div.description > p') || e.target.closest('div.issue.details div.description > p');
-		let is_subject = e.target.matches('div.issue.details div.subject') || e.target.closest('div.issue.details div.subject');
-		if(is_attribute || is_description || is_subject ){
+		let container = e.target.closest('.attribute' + _CONF_LISTENER_TARGET) || e.target.closest('.description') || e.target.closest('.subject');
+		if(_CONF_LISTENER_TARGET && e.target.closest('.attribute' + _CONF_LISTENER_TARGET)){
+			container = e.target.closest('.attribute');
+		}
+		if(container) {
 			if(e.target.closest('.dynamicEditField')) return; /* We're already into a dynamic field, ignore */
-	 		document.querySelectorAll('.dynamicEditField').forEach(function(elt){ elt.classList.remove('open'); });
+			document.querySelectorAll('.dynamicEditField').forEach(function(elt){ elt.classList.remove('open'); });
 			if(!e.target.closest('a') && !e.target.closest('button')){
-				let selector = e.target.closest('.value');
-				if(is_description) selector = e.target.closest('.description');
-				if(is_subject) selector = e.target.closest('.subject');
-				if(selector.querySelector('.dynamicEditField')) selector.querySelector('.dynamicEditField').classList.add('open');
+				let selector = container.querySelector('.dynamicEditField');
+				if(selector) selector.classList.add('open')
 			}
 		}
 });
 
 /* Perform action on .iconEdit (display edit form) */
 document.querySelector('body').addEventListener(_CONF_LISTENER_TYPE_ICON, function(e){
-	let is_attribute = e.target.matches('div.issue.details .attributes .attribute .' + _CONF_LISTENER_TARGET) || e.target.closest('div.issue.details .attributes .attribute .' + _CONF_LISTENER_TARGET);
 	let is_description = e.target.matches('div.issue.details div.description > p') || e.target.closest('div.issue.details div.description > p');
 	let is_subject = e.target.matches('div.issue.details div.subject') || e.target.closest('div.issue.details div.subject');
 	if(e.target.matches('.iconEdit') || e.target.closest('.iconEdit')){

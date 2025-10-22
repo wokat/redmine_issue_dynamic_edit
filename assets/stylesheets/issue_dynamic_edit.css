@@ -47,7 +47,8 @@ body.controller-issues.action-show div.issue.details .iconEdit {
 body.controller-issues.action-show div.issue.details.showPencil .iconEdit,
 body.controller-issues.action-show div.issue.details .attribute:hover .iconEdit,
 body.controller-issues.action-show div.issue.details .description:hover .iconEdit,
-body.controller-issues.action-show div.issue.details div.subject:hover .iconEdit {
+body.controller-issues.action-show div.issue.details div.subject:hover .iconEdit,
+body.controller-issues.action-show div.issue.details.showPencils:hover .iconEdit {
 	opacity: 1;
 }
 

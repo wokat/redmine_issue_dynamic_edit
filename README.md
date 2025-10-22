@@ -1,14 +1,20 @@
 # ✨  redmine_issue_dynamic_edit
+Add new interactive elements to the issue detail page to **dynamically update an issue’s attributes and custom fields**, directly within the details block, and **without any page refresh** (*JIRA-style inline editing*).
 
-Add new elements on detailed issue page to **dynamically update issue's attributes and custom fields**, directly in the details block of the issue **without any page refresh** (*JIRA style*).
 
-
-### 🔴  What info you should provide when opening an issue
->Please list your installed plugins and the Redmine version you use. Note that I can't fix every issue when you have conflict with an other plugin that also edit the page.
+### 🔴  What to include when opening an issue
+>Please list:
+>- The Redmine version you use
+>- All installed plugins
 >
->This plugin use JS a lot. Check your JS console from your web browser ( [HowTo](https://webmasters.stackexchange.com/a/77337) ) and try again to reproduce your issue. You'll see some information about what goes wrong. 
+>Conflicts may occur if another plugin modifies the same page elements.
 >
->Copy and paste the result that appears in your console in the Github issue and expand all possible object (error data for example). With this data, we can look if there's a problem with the ajax call the plugin performs to update the issue or if there's any JS error.
+>This plugin uses JavaScript extensively.
+>
+>Open your browser’s JS console ([HowTo](https://webmasters.stackexchange.com/a/77337)), reproduce the problem, and review the console output.
+>Copy and paste the result into your GitHub issue and expand any relevant objects (for example, error data).
+>
+>These details will help identify whether the problem comes from an AJAX request or a JavaScript error.
 
 ### 🔎  Example
 
@@ -16,27 +22,27 @@ Add new elements on detailed issue page to **dynamically update issue's attribut
 
 ### 📦  Installation
 
-* If you update the plugin, be sure to save your configuration modification (`assets/javascripts/issue_dynamic_edit_configuration_file.js`) in a safe place to set them back after the update 
-* Clone repo into plugins directory : `git clone https://github.com/Ilogeek/redmine_issue_dynamic_edit.git` (be sure that the parent folder is called `redmine_issue_dynamic_edit`)
+* Clone the repository into your Redmine `plugins` directory : `git clone https://github.com/Ilogeek/redmine_issue_dynamic_edit.git` (ensure the folder name is `redmine_issue_dynamic_edit`)
 * Restart your Redmine instance
 
-### ⚙  Configuration (new since v 0.6.6)
+### ⚙  Configuration
 
-You can set some settings by editing the file `assets/javascripts/issue_dynamic_edit_configuration_file.js`. Inside this file you'll find different variable :
-* **\_CONF\_FORCE\_HTTPS** : Will force AJAX call performed by the plugin to be done with https protocol. Use this value if you encounter some difficulties with "Mixed content" issues 
-* **\_CONF\_DISPLAY\_EDIT\_ICON** : Choose if hovering the details block will display all the pencil icons next to editable values or if the user has to hover every value to check if (s)he can edit it. Allowed value : `single`, `block`
-* **\_CONF\_LISTENER\_TYPE\_VALUE** : Choose which action will trigger the apparition of the edition block when fired from the current value. Allowed value : `none`, `click`, `dblclick`
-* **\_CONF\_LISTENER\_TYPE\_ICON** : Choose which action will trigger the apparition of the edition block when fired from the pencil icon (by default: same as **\_CONF\_LISTENER\_TYPE\_VALUE**). Allowed value : `none`, `click`, `dblclick`
-* **\_CONF\_LISTENER\_TARGET** : Choose which area will trigger the apparition of the edition block
-* **\_CONF\_EXCLUDED\_FIELD\_ID** : Choose which fields to exclude. They won't have the edit block and pencil. Eg: `TitleInput`, `DescriptionInput`, `statusListDropdown` ...
-* **\_CONF\_CHECK\_ISSUE\_UPDATE\_CONFLICT** : Choose if you allow current user to override all modifications performed by other users while editing the issue
+You can adjust the following options from Redmine’s Administration → Plugins → redmine_issue_dynamic_edit panel:
+* **\_CONF\_FORCE\_HTTPS** : forces all AJAX calls to use HTTPS (recommended to avoid Mixed Content issues). 
+* **\_CONF\_DISPLAY\_EDIT\_ICON** : controls how pencil icons appear for editable fields — set to single (hover each field individually) or block (hovering the details block shows all icons)
+* **\_CONF\_LISTENER\_TYPE\_VALUE** : defines the event type (`none`, `click`, `dblclick`) that opens an editor from the field value
+* **\_CONF\_LISTENER\_TYPE\_ICON** : defines the event type for the pencil icon (defaults to the same as `_CONF_LISTENER_TYPE_VALUE`)
+* **\_CONF\_LISTENER\_TARGET** : defines the clickable area that triggers editing
+* **\_CONF\_EXCLUDED\_FIELD\_ID** : comma-separated list of field IDs to exclude from editing (e.g. `TitleInput`, `DescriptionInput`, `statusListDropdown`)
+* **\_CONF\_CHECK\_ISSUE\_UPDATE\_CONFLICT** : if enabled, prevents overwriting changes made by other users.
 
 ### 🎨  Customization
 
-Feel free to edit `assets/stylesheets/issue_dynamic_edit.css` to update the look of your fields depending on your current Redmine Theme. 
+You can customize the visual style in `assets/stylesheets/issue_dynamic_edit.css` to better match your theme. 
 
 ### 🆕  Changelog
 
+* **v 0.9.3** : Add admin panel to settings section, fixes #127 #126 #96
 * **v 0.9.2** : JSToolbar fixed (#100)
 * **v 0.9.1** : Check version improved (avoiding update conflicts) : using [Redmine REST API](https://www.redmine.org/projects/redmine/wiki/rest_issues) and disabling check when tab is not focused (#97)
 * **v 0.9.0** : JS rewritten to remove jQuery code

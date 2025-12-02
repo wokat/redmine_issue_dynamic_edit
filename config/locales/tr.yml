@@ -2,6 +2,7 @@ tr:
   ide_txt_notice_conflict_title : "Bu uyarı, siz düzenleme yaparken başka biri tarafından düzenleme yapıldığı için alınmaktadır."
   ide_txt_notice_conflict_link : "Güncellenmiş verileri almak için sayfayı yenileyin."
   ide_txt_notice_conflict_text  : "Dikkat: Son yaptığınız değişiklikler kaybolacaktır."
+  ide_txt_button_refresh : "Verileri yenile"
   option_visual_editor_mode_switch_tab: "Görsel editör mod değiştirici sekmesini etkinleştir"
   settings_display_edit_icon : "Düzenleme simgesi görüntüleme modu"
   settings_display_edit_icon_explanations : "Detay bloğunun üzerine gelindiğinde tüm kalem simgelerinin görünmesini mi yoksa her değerin ayrı ayrı üzerine gelinerek düzenleme simgesinin görünmesini mi istediğinizi seçin"

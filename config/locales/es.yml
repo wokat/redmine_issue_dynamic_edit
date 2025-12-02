@@ -2,6 +2,7 @@ es:
   ide_txt_notice_conflict_title : "Este problema ha sido actualizado por otra persona mientras lo editaba."
   ide_txt_notice_conflict_link : "Actualice la página actual para obtener los datos actualizados."
   ide_txt_notice_conflict_text  : "Sus modificaciones actuales se perderán."
+  ide_txt_button_refresh : "Actualizar datos"
   option_visual_editor_mode_switch_tab: "Habilitar la pestaña de cambio de modo del editor visual"
   settings_display_edit_icon : "Modo de visualización del icono de edición"
   settings_display_edit_icon_explanations : "Elija si al pasar el cursor por el bloque de detalles se mostrarán todos los iconos de lápiz junto a los valores editables o si el usuario debe pasar el cursor por cada valor para comprobar si puede editarlo"

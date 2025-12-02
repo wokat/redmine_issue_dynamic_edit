@@ -2,6 +2,7 @@ en:
   ide_txt_notice_conflict_title : "This issue has been updated by someone else while you are editing it."
   ide_txt_notice_conflict_link : "Refresh the current page to get the updated data."
   ide_txt_notice_conflict_text  : "Your current modifications will be lost."
+  ide_txt_button_refresh : "Refresh data"
   option_visual_editor_mode_switch_tab: "Enable visual editor mode switch tab"
   settings_display_edit_icon : "Display edit icon mode"
   settings_display_edit_icon_explanations : "Choose if hovering the details block will display all the pencil icons next to editable values or if the user has to hover every value to check if (s)he can edit it"

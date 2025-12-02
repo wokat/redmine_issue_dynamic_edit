@@ -32,43 +32,42 @@ class DetailsIssueHooks < Redmine::Hook::ViewListener
       excluded_array = excluded_raw.split(',').map(&:strip).reject(&:empty?)
       check_conflict = settings['check_issue_update_conflict'].to_s == '1' || settings['check_issue_update_conflict'].to_s == 'true'
 
-      script = "<script>\n"
-      script << "window._CONF_FORCE_HTTPS = #{force_https ? 'true' : 'false'};\n"
-      script << "window._CONF_DISPLAY_EDIT_ICON = #{display.inspect};\n"
-      script << "window._CONF_LISTENER_TYPE_VALUE = #{l_type_value.inspect};\n"
-      script << "window._CONF_LISTENER_TYPE_ICON = #{l_type_icon.inspect};\n"
-      script << "window._CONF_LISTENER_TARGET = #{l_target.inspect};\n"
-      script << "window._CONF_EXCLUDED_FIELD_ID = [#{excluded_array.map(&:inspect).join(', ')}];\n"
-      script << "window._CONF_CHECK_ISSUE_UPDATE_CONFLICT = #{check_conflict ? 'true' : 'false'};\n"
-      script << "</script>\n"
+      config = {
+        force_https: force_https,
+        display_edit_icon: display,
+        listener_type_value: l_type_value,
+        listener_type_icon: l_type_icon,
+        listener_target: l_target,
+        excluded_field_id: excluded_array,
+        check_issue_update_conflict: check_conflict,
+        issue_id: get_issue_id(context),
+        project_id: context[:project]&.id,
+        conflict_title: l(:ide_txt_notice_conflict_title),
+        conflict_txt: l(:ide_txt_notice_conflict_text),
+        conflict_link: l(:ide_txt_notice_conflict_link),
+        refresh_button_text: l(:ide_txt_button_refresh),
+        comments_in_reverse_order: User.current.wants_comments_in_reverse_order?
+      }
 
-      (script + javascript_include_tag('issue_dynamic_edit.js', :plugin => :redmine_issue_dynamic_edit)).html_safe
+      html = javascript_tag("window.issueDynamicEditConfig = #{config.to_json};") 
+      html += stylesheet_link_tag('issue_dynamic_edit.css', :plugin => :redmine_issue_dynamic_edit, media: 'all')
+      html += javascript_include_tag('issue_dynamic_edit.js', :plugin => :redmine_issue_dynamic_edit)
+
+      html.html_safe
     end
   end
 
-  def view_issues_show_details_bottom(context)
-    content = "<script>\n"
-    content << " const _ISSUE_ID = \"#{context[:request].path_parameters[:id]}\";\n"
-    content << " const _PROJECT_ID = \"#{Issue.find(context[:request].path_parameters[:id]).project_id}\";\n"
-    content << " const _TXT_CONFLICT_TITLE = \"" + l(:ide_txt_notice_conflict_title) + "\";\n"
-    content << " const _TXT_CONFLICT_TXT = \"" + l(:ide_txt_notice_conflict_text) + "\";\n"
-    content << " const _TXT_CONFLICT_LINK = \"" + l(:ide_txt_notice_conflict_link) + "\";\n"
-    content << " const _COMMENTS_IN_REVERSE_ORDER = #{User.current.wants_comments_in_reverse_order? ? 'true' : 'false'};\n"
-    content << "</script>\n"
-    content << "<style>/* PRINT MEDIAQUERY */\n"
-    content << "@media print {\n"
-    content << "body.controller-issues.action-show div.issue.details .subject .refreshData,\n"
-    content << "body.controller-issues.action-show div.issue.details .iconEdit,\n"
-    content << "body.controller-issues.action-show .dynamicEditField {\n"
-    content << "display : none !important;\n"
-    content << "height: 0;\n"
-    content << "width: 0;\n"
-    content << "overflow: hidden;\n"
-    content << "padding : 0;\n"
-    content << "margin: 0;\n"
-    content << "}\n"
-    content << "}</style>\n"
-    return content.html_safe
-  end
+  private
 
+  def get_issue_id(context)
+    issue = context[:issue]
+    return issue.id unless issue.nil?
+
+    controller = context[:controller]
+    return nil unless controller.is_a?(IssuesController)
+
+    issue = controller.instance_variable_get(:@issue)
+
+    return issue&.id
+  end
 end

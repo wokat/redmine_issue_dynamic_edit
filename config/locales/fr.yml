@@ -2,6 +2,7 @@ fr:
   ide_txt_notice_conflict_title : "La demande a été mise à jour pendant que vous la modifiez."
   ide_txt_notice_conflict_link : "Rafraichissez la page pour voir une version à jour de la demande."
   ide_txt_notice_conflict_text  : "Vos modifications actuelles seront perdues"
+  ide_txt_button_refresh : "Rafraîchir les données"
   option_visual_editor_mode_switch_tab: "Activer l'onglet de changement de mode de l'éditeur visuel"
   settings_display_edit_icon : "Mode d'affichage de l'icône d'édition"
   settings_display_edit_icon_explanations : "Choisissez si le survol du bloc de détails affichera toutes les icônes crayon à côté des valeurs modifiables ou si l'utilisateur doit survoler chaque valeur pour vérifier si elle est modifiable"

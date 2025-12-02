@@ -28,8 +28,12 @@ body.controller-issues.action-show div.issue.details div.subject {
     align-items: center;
 }
 
-body.controller-issues.action-show div.issue.details div.subject .refreshData {
+body.controller-issues.action-show .contextual .refreshData {
 	cursor: pointer;
+}
+
+body.controller-issues.action-show .contextual .refreshLabel {
+	padding-left: 5px;
 }
 
 body.controller-issues.action-show div.issue.details .splitcontent {
@@ -37,6 +41,7 @@ body.controller-issues.action-show div.issue.details .splitcontent {
 }
 
 body.controller-issues.action-show div.issue.details .iconEdit {
+	cursor: pointer;
 	opacity: 0;
 	display: inline-block;
 	transition: opacity .3s ease-in;
@@ -180,4 +185,17 @@ body.controller-issues.action-show .dynamicEditField .check_box_group {
 		height: auto;
 		padding: 10px;
 	}
+}
+
+@media print {
+    body.controller-issues.action-show div.issue.details .subject .refreshData,
+    body.controller-issues.action-show div.issue.details .iconEdit,
+    body.controller-issues.action-show .dynamicEditField {
+		display : none !important;
+		height: 0;
+		width: 0;
+		overflow: hidden;
+		padding : 0;
+		margin: 0;
+    }
 }
